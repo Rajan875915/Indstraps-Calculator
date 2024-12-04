@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indstraps</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .app-section {
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        select, input, button {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            margin: 5px auto;
+            display: block;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .output {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .calculator-buttons button {
+            background-color: #333;
+            color: white;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Indstraps Calculator</h1>
+    <p>Calculator, Data Converter, Volume & Currency Converter</p>
+</header>
+
+<div class="container">
+    <div class="app-section">
+        <h2>Calculator</h2>
+        <input type="text" id="calculator-display" disabled>
+        <div class="calculator-buttons">
+            <button onclick="appendToCalculator('1')">1</button>
+            <button onclick="appendToCalculator('2')">2</button>
+            <button onclick="appendToCalculator('3')">3</button>
+            <button onclick="appendToCalculator('+')">+</button>
+            <button onclick="appendToCalculator('4')">4</button>
+            <button onclick="appendToCalculator('5')">5</button>
+            <button onclick="appendToCalculator('6')">6</button>
+            <button onclick="appendToCalculator('-')">-</button>
+            <button onclick="appendToCalculator('7')">7</button>
+            <button onclick="appendToCalculator('8')">8</button>
+            <button onclick="appendToCalculator('9')">9</button>
+            <button onclick="appendToCalculator('*')">×</button>
+            <button onclick="appendToCalculator('0')">0</button>
+            <button onclick="appendToCalculator('.')">.</button>
+            <button onclick="clearCalculator()">C</button>
+            <button onclick="appendToCalculator('/')">÷</button>
+            <button onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <div class="app-section">
+        <h2>Data Converter</h2>
+        <div class="form-group">
+            <input type="text" id="data-input" placeholder="Enter value to convert">
+        </div>
+        <div class="form-group">
+            <select id="data-unit">
+                <option value="bytes">Bytes</option>
+                <option value="kilobytes">Kilobytes</option>
+                <option value="megabytes">Megabytes</option>
+                <option value="gigabytes">Gigabytes</option>
+            </select>
+        </div>
+        <button onclick="convertData()">Convert</button>
+        <div class="output" id="data-output"></div>
+    </div>
+
+    <div class="app-section">
+        <h2>Volume Converter</h2>
+        <div class="form-group">
+            <input type="number" id="volume-value" placeholder="Enter value in Liters">
+        </div>
+        <div class="form-group">
+            <select id="volume-unit">
+                <option value="liters">Liters</option>
+                <option value="milliliters">Milliliters</option>
+                <option value="gallons">Gallons</option>
+                <option value="cubic-meters">Cubic Meters</option>
+            </select>
+        </div>
+        <button onclick="convertVolume()">Convert</button>
+        <div class="output" id="volume-output"></div>
+    </div>
+
+    <div class="app-section">
+        <h2>Currency Converter</h2>
+        <div class="form-group">
+            <input type="number" id="currency-value" placeholder="Enter amount in USD">
+        </div>
+        <div class="form-group">
+            <select id="currency-target">
+                <option value="EUR">Euro (EUR)</option>
+                <option value="INR">Indian Rupee (INR)</option>
+                <option value="GBP">British Pound (GBP)</option>
+                <option value="JPY">Japanese Yen (JPY)</option>
+            </select>
+        </div>
+        <button onclick="convertCurrency()">Convert</button>
+        <div class="output" id="currency-output"></div>
+    </div>
+</div>
+
+<script>
+    // Calculator
+    let calculatorInput = "";
+
+    function appendToCalculator(value) {
+        calculatorInput += value;
+        document.getElementById("calculator-display").value = calculatorInput;
+    }
+
+    function clearCalculator() {
+        calculatorInput = "";
+        document.getElementById("calculator-display").value = "";
+    }
+
+    function calculateResult() {
+        try {
+            calculatorInput = eval(calculatorInput).toString();
+            document.getElementById("calculator-display").value = calculatorInput;
+        } catch (error) {
+            document.getElementById("calculator-display").value = "Error";
+        }
+    }
+
+    // Data Converter
+    function convertData() {
+        let inputValue = parseFloat(document.getElementById("data-input").value);
+        let unit = document.getElementById("data-unit").value;
+        let output = 0;
+
+        if (unit === "bytes") {
+            output = inputValue / 1024;
+        } else if (unit === "kilobytes") {
+            output = inputValue * 1024;
+        } else if (unit === "megabytes") {
+            output = inputValue * 1024 * 1024;
+        } else if (unit === "gigabytes") {
+            output = inputValue * 1024 * 1024 * 1024;
+        }
+
+        document.getElementById("data-output").textContent = `Converted Value: ${output} ${unit}`;
+    }
+
+    // Volume Converter
+    function convertVolume() {
+        let inputValue = parseFloat(document.getElementById("volume-value").value);
+        let unit = document.getElementById("volume-unit").value;
+        let output = 0;
+
+        if (unit === "liters") {
+            output = inputValue * 1000; // Liters to Milliliters
+        } else if (unit === "milliliters") {
+            output = inputValue / 1000; // Milliliters to Liters
+        } else if (unit === "gallons") {
+            output = inputValue * 3.78541; // Gallons to Liters
+        } else if (unit === "cubic-meters") {
+            output = inputValue * 1000; // Cubic meters to Liters
+        }
+
+        document.getElementById("volume-output").textContent = `Converted Volume: ${output} Liters`;
+    }
+
+    // Currency Converter (AI-Powered Simulation)
+    function convertCurrency() {
+        const exchangeRates = {
+            EUR: 0.85,
+            INR: 83.5,
+            GBP: 0.75,
+            JPY: 145.8
+        };
+
+        let usdValue = parseFloat(document.getElementById("currency-value").value);
+        let targetCurrency = document.getElementById("currency-target").value;
+
+        let conversionRate = exchangeRates[targetCurrency];
+        let convertedValue = usdValue * conversionRate;
+
+        document.getElementById("currency-output").textContent = `Converted Value: ${convertedValue} ${targetCurrency}`;
+    }
+</script>
+
+</body>
+</html>
